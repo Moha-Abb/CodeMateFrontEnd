@@ -1,6 +1,6 @@
 export default interface profileUser {
 
-    idusuario?: string;
+    idusuario: string;
     displayName: string;
     photoURL: string;
 

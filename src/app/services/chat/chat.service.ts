@@ -26,10 +26,10 @@ export class ChatService {
   getUsers(): Observable<profileUser[]> {
 
     const result = collection(this.firestore, 'users')
-    return collectionData(result, { idField: 'idusuario' }) as Observable<profileUser[]>
+    return collectionData(result, { idField: 'id' }) as Observable<profileUser[]>
   }
 
-  addUser(data: UserProfile) {
+  addUser(data: profileUser) {
     const result = collection(this.firestore, 'users')
     return addDoc(result, data)
   }

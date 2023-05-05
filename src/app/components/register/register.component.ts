@@ -58,6 +58,7 @@ export class RegisterComponent implements OnInit {
           displayName: user?.displayName,
           photoURL: user?.photoURL
         };
+        console.log(this.userData)
         this.chatSercive.addUser(this.userData)
         this.router.navigate(['/profile'])
       })
