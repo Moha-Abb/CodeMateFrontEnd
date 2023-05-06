@@ -31,8 +31,8 @@
                             <button class="text-blue-400 font-bold text-lg">
                                 Salir
                             </button>
-                            <div class="block flex-grow-0  h-10 w-12 pl-5 pt-1" *ngIf="oneUserRegisted">
-                                <img class="w-8 rounded-full" *ngFor="let user of oneUserRegisted"
+                            <div class="block flex-grow-0  h-10 w-12 pl-5 pt-1">
+                                <img class="w-8 rounded-full" *ngFor="let user of currentUserData"
                                     [src]="user?.photoURL? user?.photoURL : 'https://images.freeimages.com/365/images/previews/85b/psd-universal-blue-web-user-icon-53242.jpg'"
                                     alt="profile">
 
@@ -86,12 +86,13 @@
                 <ul class="flex items-center justify-center space-x-2">
                     <!-- Story #1 -->
 
+
                     <li class="flex flex-col items-center space-y-2"
-                        *ngFor="let friend of  id==currentUser.idusuario? friendsAccepted: friendsotherlUserDataResult">
+                        *ngFor="let friend of  (id==currentUser.idusuario ? friendsAccepted : friendsotherlUserDataResult)">
                         <!-- Ring -->
                         <button (click)="chatFriend(friend.amigoID)" class="block bg-white p-1 rounded-full">
                             <img class="w-16 rounded-full"
-                                [src]="friend?.amigoPhoto? friend?.amigoPhoto : 'https://images.freeimages.com/365/images/previews/85b/psd-universal-blue-web-user-icon-53242.jpg'"
+                                [src]="friend.amigoPhoto? friend.amigoPhoto : 'https://images.freeimages.com/365/images/previews/85b/psd-universal-blue-web-user-icon-53242.jpg'"
                                 alt="">
                         </button>
                         <!-- Username -->
@@ -103,7 +104,8 @@
                 </ul>
             </div>
 
-            <a class="flex bg-white shadow mt-6  rounded-lg p-2">
+            <a href="https://finalprojectfront.onrender.com" target="_blank"
+                class="flex bg-white shadow mt-6  rounded-lg p-2">
                 <img src="assets/png-clipart-airplane-paper-plane-emoji-computer-icons-paper-airplanes-blue-game.png"
                     alt="Just a flower" class=" w-10  object-cover  h-10 rounded-xl">
                 <div class="flex flex-col justify-center w-full px-2 py-1">
@@ -229,7 +231,73 @@
 
 
 
-            <app-chat *ngIf=" id == currentUser.idusuario "></app-chat>
+            <ng-container *ngIf=" id == currentUser.idusuario ">
+                <h1 class="text-center text-blue-500 text-xl font-bold">Chat</h1>
+                <div class="bg-white shadow rounded-lg mb-6">
+                    <div class="flex flex-row items-center px-2 py-3 mx-3">
+                        <div class="w-auto h-auto rounded-full">
+                            <img class="w-12 h-12 object-cover rounded-full shadow cursor-pointer" alt="User avatar"
+                                [src]="ChatFriendContent?.amigoPhoto? ChatFriendContent.amigoPhoto : 'https://images.freeimages.com/365/images/previews/85b/psd-universal-blue-web-user-icon-53242.jpg'">
+                        </div>
+                        <div class="flex flex-col mb-2 ml-4 mt-1">
+                            <div class="text-gray-600 text-sm font-semibold">{{ChatFriendContent?.amigoNombre}}</div>
+
+
+                        </div>
+                    </div>
+                    <div class="border-b border-gray-100"></div>
+
+                    <!-- contenido del chat -->
+
+
+                    <div class="text-black p-4 w-full  ">
+                        <ul class="space-y-2 w-100" id="chat">
+                            <li *ngFor="let message of chatMessages" class="flex "
+                                [ngClass]="{'justify-start': message.senderId !== currentUser.idusuario, ' justify-end': message.senderId === currentUser.idusuario}">
+                                <div *ngIf="message.senderId === currentUser.idusuario"
+                                    class="flex justify-end items-center">
+                                    <div class="bg-gray-100 rounded-lg px-4 pt-2 pb-2.5">
+                                        <div class="font-semibold text-sm leading-relaxed flex justify-end">Tú</div>
+                                        <div class="text-xs leading-snug md:leading-normal">{{message.message}}</div>
+                                    </div>
+                                    <img class="rounded-full h-8 w-8 mr-2 ml-2 mt-1 "
+                                        [src]="currentUser.photo? currentUser.photo : 'https://images.freeimages.com/365/images/previews/85b/psd-universal-blue-web-user-icon-53242.jpg'">
+
+                                </div>
+                                <div *ngIf="message.senderId !== currentUser.idusuario"
+                                    class="flex justify-start items-center">
+                                    <img class="rounded-full h-8 w-8 mr-2 mt-1 "
+                                        [src]="ChatFriendContent?.amigoPhoto? ChatFriendContent.amigoPhoto : 'https://images.freeimages.com/365/images/previews/85b/psd-universal-blue-web-user-icon-53242.jpg'">
+                                    <div class="bg-blue-200 rounded-lg px-4 pt-2 pb-2.5">
+                                        <div class="font-semibold text-sm leading-relaxed">
+                                            {{ChatFriendContent?.amigoNombre}}</div>
+                                        <div class="text-xs leading-snug md:leading-normal">{{message.message}}</div>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+
+
+                    <!-- input del chat -->
+                    <form (ngSubmit)="sendMessage()" [formGroup]="formReg2"
+                        class="relative flex items-center self-center w-full max-w-xl p-4 overflow-hidden text-gray-600 focus-within:text-gray-400">
+                        <img class="w-10 h-10 object-cover rounded-full shadow mr-2 cursor-pointer" alt="User avatar"
+                            [src]="currentUser.photo? currentUser.photo : 'https://images.freeimages.com/365/images/previews/85b/psd-universal-blue-web-user-icon-53242.jpg'">
+
+
+                        <input type="text" formControlName="text" [(ngModel)]="newMessage" class="w-full py-2 pl-4 pr-10 text-sm bg-gray-100 border border-transparent appearance-none rounded-tg
+        placeholder-gray-400" style="border-radius: 25px" placeholder="Post a comment..." autocomplete="off">
+                        <button type="submit" id="btnSend">
+                            <svg class="w-8 ms-6 h-8 text-gray-500 origin-center transform rotate-90"
+                                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                <path
+                                    d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" />
+                            </svg>
+                        </button>
+                    </form>
+                </div>
+            </ng-container>
         </article>
     </main>
 </div>

@@ -3,9 +3,11 @@ import { UserService } from 'src/app/services/user.service';
 import { Router } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
 import { Observable, firstValueFrom } from 'rxjs';
-import { Firestore, addDoc, collection, collectionData, doc, updateDoc } from '@angular/fire/firestore';
+import { Firestore, addDoc, collection, collectionData, doc, getDocs, setDoc, updateDoc } from '@angular/fire/firestore';
 import { LikeFriendsService } from 'src/app/services/likeFriends/like-friends.service';
 import profileUser from 'src/app/interfaces/user-details';
+import { FormControl, FormGroup } from '@angular/forms';
+import { onSnapshot, orderBy } from 'firebase/firestore';
 
 @Component({
   selector: 'app-profile',
@@ -27,7 +29,7 @@ export class ProfileComponent implements OnInit {
 
   friendsAccepted: any[] = [];
   friendsotherlUserDataResult: any[] = [];
-
+  FriendsArray: any[] = [];
 
 
   amigoAgregado?: boolean
@@ -35,6 +37,15 @@ export class ProfileComponent implements OnInit {
   nameFriend: any;
   photoFriend: any;
   nameFriendObject: any;
+  currentUserData: any;
+
+  newMessage: string = ''
+  messages: [];
+  formReg2: any;
+  selectedFriendId: any;
+  ChatFriendContent: any;
+  userChat: string | undefined;
+  chatMessages: any;
 
   constructor(private userService: UserService, private router: Router,
     private route: ActivatedRoute,
@@ -45,6 +56,11 @@ export class ProfileComponent implements OnInit {
     this.id = ''
     this.oneUserRegisted = undefined;
 
+    this.formReg2 = new FormGroup({
+      idusuario: new FormControl(),
+      text: new FormControl('')
+    })
+    this.messages = []
 
   }
   async ngOnInit(): Promise<void> {
@@ -64,11 +80,12 @@ export class ProfileComponent implements OnInit {
 
     const friendsotherlUser = collection(this.firestore, 'friendRequests' + this.id)
     const friendsotherlUserData = collectionData(friendsotherlUser, { idField: 'id' })
-    const friendsotherlUserDataResult = await firstValueFrom(friendsotherlUserData)
-    console.log(friendsotherlUserDataResult)
+    this.friendsotherlUserDataResult = await firstValueFrom(friendsotherlUserData)
 
 
     this.oneUserRegisted = this.usersRegisted.filter((usert: { idusuario: string; }) => usert.idusuario == this.id);
+    this.currentUserData = this.usersRegisted.filter((usert: { idusuario: string; }) => usert.idusuario == this.currentUser.idusuario);
+
     const result = collection(this.firestore, 'friendRequests' + this.currentUser.idusuario)
 
     const friends = collectionData(result, { idField: 'id' })
@@ -86,22 +103,7 @@ export class ProfileComponent implements OnInit {
 
     // para obetener lista de amigos y buscar nombre del amigo
     this.friendsAccepted = this.solicitudes.filter(solicitud => ((solicitud.receiveUser == this.currentUser.idusuario || solicitud.senderUser == this.currentUser.idusuario) && solicitud.estado == 'aceptado'));
-    console.log(this.friendsAccepted)
-    // for (let element of this.friendsAccepted) {
-    //   if (this.currentUser.idusuario == element.receiveUser) {
-    //     this.nameFriendObject = this.usersRegisted.filter((user: { idusuario: any; }) => user.idusuario == element.senderUser);
 
-    //     this.nameFriend = this.nameFriendObject[0].displayName
-    //     this.photoFriend = this.nameFriendObject[0].photoURL
-
-    //   } else {
-    //     this.nameFriendObject = this.usersRegisted.filter((user: { idusuario: any; }) => user.idusuario == element.receiveUser);
-    //     this.nameFriend = this.nameFriendObject[0].displayName
-    //     this.photoFriend = this.nameFriendObject[0].photoURL
-    //   }
-    // }
-
-    //lista de amigos
     const realfriends = collection(this.firestore, 'friends' + this.id)
     const realfriendsData = collectionData(realfriends, { idField: 'id' })
 
@@ -152,24 +154,64 @@ export class ProfileComponent implements OnInit {
     const result = collection(this.firestore, 'friendRequests' + amigoId)
     const friends = collectionData(result, { idField: 'id' })
     const requestFriendsColection = await firstValueFrom(friends)
+
     const request = requestFriendsColection.find(solicitud => (solicitud['senderUser'] == amigoId));
-    const amigoRef = doc(this.firestore, 'friendRequests' + this.currentUser.idusuario, this.solicitudes[0].id);
-
-
-    await updateDoc(amigoRef, { estado: 'aceptado' });
+    for (let requestIn of this.solicitudes) {
+      if (requestIn.amigoID == amigoId) {
+        const amigoRef = doc(this.firestore, 'friendRequests' + this.currentUser.idusuario, requestIn.id);
+        await updateDoc(amigoRef, { estado: 'aceptado' });
+      }
+    }
     const amigoRef2 = doc(this.firestore, 'friendRequests' + amigoId, request?.['id']);
 
-    console.log(this.solicitudes[0].id)
-
     await updateDoc(amigoRef2, { estado: 'aceptado' });
-
     location.reload();
   }
 
-  chatFriend(chatID: string) {
+  async chatFriend(chatID: string) {
 
-    console.log(this.friendsAccepted)
-    const chatFriendObject = this.friendsAccepted
+    this.ChatFriendContent = this.friendsAccepted.find(solicitud => (solicitud.amigoID == chatID));
+    this.userChat = chatID;
+
+    const friendsotherlUser = collection(this.firestore, `chats/${chatID}+${this.currentUser.idusuario}/messages`)
+    const realfriendsData = collectionData(friendsotherlUser, { idField: 'id' })
+    const realfriendsDataDetails = await firstValueFrom(realfriendsData);
+
+    // const querySnapshot = await getDocs(friendsotherlUser);
+    this.chatMessages = realfriendsDataDetails
+    this.chatMessages = this.chatMessages.map((msg: { timestamp: { toDate: () => any; }; }) => {
+      return { ...msg, timestamp: msg.timestamp.toDate() };
+    });
+    this.chatMessages.sort((a: { timestamp: { getTime: () => number; }; }, b: { timestamp: { getTime: () => number; }; }) => a.timestamp.getTime() - b.timestamp.getTime());
+
+    console.log(this.chatMessages)
+  }
+  async sendMessage() {
+
+    const chatRef = collection(this.firestore, `chats/${this.userChat}+${this.currentUser.idusuario}/messages`);
+    const chatRef2 = collection(this.firestore, `chats/${this.currentUser.idusuario}+${this.userChat}/messages`);
+    console.log(this.userChat)
+    await addDoc(chatRef, {
+      senderId: this.currentUser.idusuario,
+      message: this.newMessage,
+      timestamp: new Date()
+    });
+    await addDoc(chatRef2, {
+      receiveId: this.userChat,
+      message: this.newMessage,
+      timestamp: new Date()
+    });
+
+    const friendsotherlUser = collection(this.firestore, `chats/${this.userChat}+${this.currentUser.idusuario}/messages`)
+    const realfriendsData = collectionData(friendsotherlUser, { idField: 'id' })
+    const realfriendsDataDetails = await firstValueFrom(realfriendsData);
+    this.chatMessages = realfriendsDataDetails
+    this.chatMessages = this.chatMessages.map((msg: { timestamp: { toDate: () => any; }; }) => {
+      return { ...msg, timestamp: msg.timestamp.toDate() };
+    });
+    this.chatMessages.sort((a: { timestamp: { getTime: () => number; }; }, b: { timestamp: { getTime: () => number; }; }) => a.timestamp.getTime() - b.timestamp.getTime());
+
+    this.newMessage = ''
   }
   logOut() {
     this.userService.logOut()
