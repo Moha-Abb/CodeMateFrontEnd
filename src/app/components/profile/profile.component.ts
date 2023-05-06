@@ -46,6 +46,7 @@ export class ProfileComponent implements OnInit {
   ChatFriendContent: any;
   userChat: string | undefined;
   chatMessages: any;
+  unsubscribe: import("@angular/fire/firestore").Unsubscribe | undefined;
 
   constructor(private userService: UserService, private router: Router,
     private route: ActivatedRoute,
@@ -169,15 +170,23 @@ export class ProfileComponent implements OnInit {
   }
 
   async chatFriend(chatID: string) {
-
     this.ChatFriendContent = this.friendsAccepted.find(solicitud => (solicitud.amigoID == chatID));
     this.userChat = chatID;
 
     const friendsotherlUser = collection(this.firestore, `chats/${chatID}+${this.currentUser.idusuario}/messages`)
     const realfriendsData = collectionData(friendsotherlUser, { idField: 'id' })
+
+    // Agregamos el onSnapshot al documento de mensajes del chat
+    onSnapshot(friendsotherlUser, (snapshot) => {
+      this.chatMessages = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+      this.chatMessages = this.chatMessages.map((msg: { timestamp: { toDate: () => any; }; }) => {
+        return { ...msg, timestamp: msg.timestamp.toDate() };
+      });
+      this.chatMessages.sort((a: { timestamp: { getTime: () => number; }; }, b: { timestamp: { getTime: () => number; }; }) => a.timestamp.getTime() - b.timestamp.getTime());
+    })
+
     const realfriendsDataDetails = await firstValueFrom(realfriendsData);
 
-    // const querySnapshot = await getDocs(friendsotherlUser);
     this.chatMessages = realfriendsDataDetails
     this.chatMessages = this.chatMessages.map((msg: { timestamp: { toDate: () => any; }; }) => {
       return { ...msg, timestamp: msg.timestamp.toDate() };
@@ -209,7 +218,7 @@ export class ProfileComponent implements OnInit {
     this.chatMessages = this.chatMessages.map((msg: { timestamp: { toDate: () => any; }; }) => {
       return { ...msg, timestamp: msg.timestamp.toDate() };
     });
-    this.chatMessages.sort((a: { timestamp: { getTime: () => number; }; }, b: { timestamp: { getTime: () => number; }; }) => a.timestamp.getTime() - b.timestamp.getTime());
+    this.chatMessages = this.chatMessages.sort((a: { timestamp: { getTime: () => number; }; }, b: { timestamp: { getTime: () => number; }; }) => a.timestamp.getTime() - b.timestamp.getTime());
 
     this.newMessage = ''
   }

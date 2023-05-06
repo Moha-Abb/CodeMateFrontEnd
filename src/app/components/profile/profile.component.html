@@ -250,7 +250,7 @@
                     <!-- contenido del chat -->
 
 
-                    <div class="text-black p-4 w-full  ">
+                    <div class="text-black p-4 w-full" style="height: 400px; overflow-y: scroll;">
                         <ul class="space-y-2 w-100" id="chat">
                             <li *ngFor="let message of chatMessages" class="flex "
                                 [ngClass]="{'justify-start': message.senderId !== currentUser.idusuario, ' justify-end': message.senderId === currentUser.idusuario}">
