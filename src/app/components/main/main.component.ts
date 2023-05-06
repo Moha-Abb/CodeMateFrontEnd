@@ -9,6 +9,8 @@ import { ChatService } from 'src/app/services/chat/chat.service';
 export class MainComponent implements OnInit {
 
   users: profileUser[];
+  currentUser: any;
+
 
   constructor(private chatService: ChatService) {
 
@@ -20,5 +22,11 @@ export class MainComponent implements OnInit {
       this.users = user;
       console.log(this.users)
     })
+
+    const userDataString = localStorage.getItem('userData');
+    if (userDataString) {
+      this.currentUser = JSON.parse(userDataString);
+    }
+    console.log(this.currentUser)
   }
 }

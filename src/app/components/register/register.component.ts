@@ -38,7 +38,7 @@ export class RegisterComponent implements OnInit {
           photoURL: response.user?.photoURL
         };
         this.chatSercive.addUser(this.userData)
-        this.router.navigate(["/login"])
+        this.router.navigate(["/main"])
       })
       .catch(error => console.log('Registration failed:', error))
   }

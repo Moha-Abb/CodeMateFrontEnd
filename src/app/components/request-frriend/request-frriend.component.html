@@ -1,0 +1,8 @@
+<h2>Solicitudes pendientes</h2>
+<ul>
+    <li *ngFor="let solicitud of solicitudes">
+        {{ solicitud.usuario1 }} quiere ser tu amigo
+        <button (click)="aceptarSolicitud(solicitud.id)">Aceptar</button>
+    </li>
+</ul>
+<p *ngIf="solicitudes.length === 0">No tienes solicitudes pendientes</p>

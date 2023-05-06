@@ -22,6 +22,10 @@ import { FooterComponent } from './components/footer/footer.component';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 import { ChatComponent } from './components/chat/chat.component';
 import { MainComponent } from './components/main/main.component';
+import { RequestFRriendComponent } from './components/request-frriend/request-frriend.component';
+import { AcceptRequestFRriendComponent } from './components/friends/accept-request-frriend/accept-request-frriend.component';
+import { FRriendsListComponent } from './components/friends/f-rriends-list/f-rriends-list.component';
+import { UserProfileComponent } from './components/user-profile/user-profile.component';
 
 @NgModule({
   declarations: [
@@ -35,8 +39,10 @@ import { MainComponent } from './components/main/main.component';
     PageNotFoundComponent,
     ChatComponent,
     MainComponent,
-
-
+    RequestFRriendComponent,
+    AcceptRequestFRriendComponent,
+    FRriendsListComponent,
+    UserProfileComponent,
 
   ],
   imports: [

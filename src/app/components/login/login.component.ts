@@ -61,18 +61,23 @@ export class LoginComponent {
           this.userData = {
             idusuario: user?.uid,
             displayName: user?.displayName,
-            photoURL: user?.photoURL
+            photoURL: user?.photoURL,
+            email: user?.email
           };
           this.chatSercive.addUser(this.userData)
         }
         localStorage.setItem('userData',
           JSON.stringify({
+            idusuario: user?.uid,
             email: user?.email,
             displayName: user?.displayName,
             photo: user?.photoURL
           }))
 
-        this.router.navigate(['/profile'])
+
+        this.router.navigate(['/profile'], { queryParams: { id: user?.uid } });
+
+
       });
 
 
