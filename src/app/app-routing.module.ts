@@ -7,6 +7,9 @@ import { ProfileComponent } from './components/profile/profile.component';
 import { AccessControlGuard } from './guards/access-control.guard';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 import { MainComponent } from './components/main/main.component';
+import { ContacttComponent } from './components/contactt/contactt.component';
+import { SobreNosotrosComponent } from './components/sobre-nosotros/sobre-nosotros.component';
+import { LoginGuardGuard } from './guards/login-guard.guard';
 
 
 const routes: Routes = [
@@ -16,7 +19,12 @@ const routes: Routes = [
     redirectTo: 'home'
   },
   { path: 'home', component: HomeComponent },
-  { path: 'login', component: LoginComponent },
+  { path: 'contacto', component: ContacttComponent },
+  { path: 'sobrenosotros', component: SobreNosotrosComponent },
+  {
+    path: 'login', component: LoginComponent,
+    canActivate: [LoginGuardGuard]
+  },
   { path: 'register', component: RegisterComponent },
   {
     path: 'profile/:id', component: ProfileComponent

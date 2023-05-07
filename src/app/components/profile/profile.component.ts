@@ -66,6 +66,7 @@ export class ProfileComponent implements OnInit {
   }
   async ngOnInit(): Promise<void> {
 
+
     const userDataString = localStorage.getItem('userData');
     if (userDataString) {
       this.currentUser = JSON.parse(userDataString);
@@ -94,16 +95,19 @@ export class ProfileComponent implements OnInit {
     const users = await firstValueFrom(friends);
     //lista de las solicitudes
     this.solicitudes = users;
+    console.log()
     this.currentRequest = this.solicitudes.filter(solicitud => solicitud.receiveUser == this.currentUser.idusuario);
     this.currentRequest2 = this.solicitudes.filter(solicitud => (solicitud.senderUser == this.currentUser.idusuario && this.id == solicitud.receiveUser));
 
+    console.log(this.currentRequest2)
 
-    this.noRequesFriend = this.currentRequest2.some(solicitud => solicitud.receiveUser == this.currentUser.idusuario)
-
+    this.noRequesFriend = this.solicitudes.some(solicitud => solicitud.estado == 'pendiente')
+    console.log(this.noRequesFriend)
     this.currentRequest3 = this.solicitudes.filter(solicitud => (solicitud.senderUser == this.id && solicitud.receiveUser == this.currentUser.idusuario));
 
     // para obetener lista de amigos y buscar nombre del amigo
     this.friendsAccepted = this.solicitudes.filter(solicitud => ((solicitud.receiveUser == this.currentUser.idusuario || solicitud.senderUser == this.currentUser.idusuario) && solicitud.estado == 'aceptado'));
+    console.log(this.friendsAccepted)
 
     const realfriends = collection(this.firestore, 'friends' + this.id)
     const realfriendsData = collectionData(realfriends, { idField: 'id' })

@@ -5,8 +5,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
-// import { AngularFireModule } from '@angular/fire/compat';
-// import { FirestoreModule } from '@angular/fire/firestore';
+
 
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 
@@ -26,6 +25,8 @@ import { RequestFRriendComponent } from './components/request-frriend/request-fr
 import { AcceptRequestFRriendComponent } from './components/friends/accept-request-frriend/accept-request-frriend.component';
 import { FRriendsListComponent } from './components/friends/f-rriends-list/f-rriends-list.component';
 import { UserProfileComponent } from './components/user-profile/user-profile.component';
+import { ContacttComponent } from './components/contactt/contactt.component';
+import { SobreNosotrosComponent } from './components/sobre-nosotros/sobre-nosotros.component';
 
 @NgModule({
   declarations: [
@@ -43,6 +44,8 @@ import { UserProfileComponent } from './components/user-profile/user-profile.com
     AcceptRequestFRriendComponent,
     FRriendsListComponent,
     UserProfileComponent,
+    ContacttComponent,
+    SobreNosotrosComponent
 
   ],
   imports: [
