@@ -29,6 +29,7 @@ export class ProfileComponent implements OnInit {
 
   friendsAccepted: any[] = [];
   friendsotherlUserDataResult: any[] = [];
+  friendsotherlUserDataResult2: any[] = [];
   FriendsArray: any[] = [];
 
 
@@ -105,7 +106,7 @@ export class ProfileComponent implements OnInit {
 
     // para obetener lista de amigos y buscar nombre del amigo
     this.friendsAccepted = this.solicitudes.filter(solicitud => ((solicitud.receiveUser == this.currentUser.idusuario || solicitud.senderUser == this.currentUser.idusuario) && solicitud.estado == 'aceptado'));
-
+    this.friendsotherlUserDataResult2 = this.friendsotherlUserDataResult.filter(solicitud => ((solicitud.receiveUser == this.id || solicitud.senderUser == this.id) && solicitud.estado == 'aceptado'));
     const realfriends = collection(this.firestore, 'friends' + this.id)
     const realfriendsData = collectionData(realfriends, { idField: 'id' })
 

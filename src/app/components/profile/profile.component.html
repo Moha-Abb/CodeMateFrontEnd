@@ -88,7 +88,7 @@
 
 
                     <li class="flex flex-col items-center space-y-2"
-                        *ngFor="let friend of  (id==currentUser.idusuario ? friendsAccepted : friendsotherlUserDataResult)">
+                        *ngFor="let friend of  (id==currentUser.idusuario ? friendsAccepted : friendsotherlUserDataResult2)">
                         <!-- Ring -->
                         <button (click)="chatFriend(friend.amigoID)" class="block bg-white p-1 rounded-full">
                             <img class="w-16 rounded-full"
