@@ -1,4 +1,4 @@
-<section class="content body-bg height  px-2 md:px-0" style="font-family:'Lato',sans-serif;">
+<!-- <section class="content body-bg height  px-2 md:px-0" style="font-family:'Lato',sans-serif;">
 
     <main class="bg-white max-w-lg mx-auto p-8 md:p-12 my-2 rounded-lg shadow-2xl">
         <section>
@@ -37,4 +37,78 @@
         <p class="text-white">Don't have an account? <a routerLink="/register" class="font-bold hover:underline">Sign
                 up</a>.</p>
     </div>
-</section>
+</section> -->
+
+<div class="bg-gray-900 dark:bg-gray-900">
+    <div class="flex justify-center h-screen">
+        <div class="hidden bg-cover lg:block lg:w-2/3"
+            style="background-image: url(https://images.unsplash.com/photo-1499951360447-b19be8fe80f5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80)">
+            <div class="flex items-center h-full px-20 bg-gray-900 bg-opacity-40">
+                <div>
+                    <h2 class="text-4xl font-bold text-white text-neutral-800">CodeMate</h2>
+
+                    <p class="max-w-xl mt-3 text-gray-300">
+                        ¡Bienvenido a CodeMate! La red social para programadores. Aquí podrás conectarte con otros
+                        desarrolladores de todo el mundo, compartir conocimientos, colaborar en proyectos y mostrar
+                        tus habilidades en el mundo de la programación. Regístrate ahora para formar parte de
+                        nuestra comunidad y accede a todas las funcionalidades de la plataforma. ¿Ya tienes una
+                        cuenta? Inicia sesión y comienza a descubrir todo lo que CodeMate tiene para ofrecerte.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex items-center  w-full max-w-md px-6 mx-auto lg:w-2/6">
+            <div class="flex-1">
+                <div class="text-center">
+                    <h2 class="text-4xl font-bold text-center text-neutral-800 dark:text-white">Bienvenido a CodeMate
+                    </h2>
+
+                    <p class="mt-3 text-gray-500 dark:text-gray-300">Inicia sesion en tu cuenta
+                    </p>
+                </div>
+
+                <div class="mt-8">
+                    <div>
+                        <div>
+                            <label for="email" class="block mb-2 text-sm text-gray-600 dark:text-gray-200">Direccion
+                                Email</label>
+                            <input type="email" name="email" id="email" placeholder="example@example.com"
+                                class="block bg-gray-900 w-full px-4 py-2 mt-2 text-white placeholder-gray-400 bg-white border border-gray-200 rounded-md dark:placeholder-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 focus:border-blue-400 dark:focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40" />
+                        </div>
+
+                        <div class="mt-6">
+                            <div class="flex justify-between mb-2">
+                                <label for="password"
+                                    class="text-sm text-gray-600 dark:text-gray-200">Contraseña</label>
+                                <a href="#"
+                                    class="text-sm text-gray-400 focus:text-blue-500 hover:text-blue-500 hover:underline">Has
+                                    olvidado la Contraseña?</a>
+                            </div>
+
+                            <input type="password" name="password" id="password" placeholder="Your Password"
+                                class="block w-full px-4 py-2 mt-2 bg-gray-900 text-white placeholder-gray-400 bg-white border border-gray-200 rounded-md dark:placeholder-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 focus:border-blue-400 dark:focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40" />
+                        </div>
+
+                        <div class="mt-6">
+                            <button
+                                class="w-full px-4 py-2 tracking-wide text-white transition-colors duration-200 transform bg-blue-500 rounded-md hover:bg-blue-400 focus:outline-none focus:bg-blue-400 focus:ring focus:ring-blue-300 focus:ring-opacity-50">
+                                Iniciar Sesion
+                            </button>
+                        </div>
+                        <div class="mt-3">
+                            <button type="submit" (click)="loginWithGoogle()"
+                                class="w-full px-4 py-2 tracking-wide text-white transition-colors duration-200 transform bg-blue-500 rounded-md hover:bg-blue-400 focus:outline-none focus:bg-blue-400 focus:ring focus:ring-blue-300 focus:ring-opacity-50">
+                                Inicia Sesion con Google
+                            </button>
+                        </div>
+
+                    </div>
+
+                    <p class="mt-6 text-sm text-center text-gray-400">No tienes cuenta todavia? <a
+                            class="text-blue-500 focus:outline-none focus:underline hover:underline">Registrate</a>.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
